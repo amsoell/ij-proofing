@@ -1,0 +1,23 @@
+<section id="assignments" ng-init="getAssignments()">
+  <a href="#/assignments/create" class="button button-mini">New Assignment</a>
+	<table class="table-border table-stripes">
+	  <thead>
+	    <tr>
+	      <th>Description</th>
+	      <th>Created</th>
+	      <th>Created By</th>
+	      <th>Assigned To</th>
+	      <th>Details</th>
+	    </tr>
+	  </thead>
+	  <tbody>
+	    <tr ng-repeat="assignment in assignments" ng-controller="AssignmentController" ng-init="load($parent.assignment)">
+	      <td>{{assignment.description}}</td>
+        <td>{{assignment.creation_date}}</td>
+        <td>{{assignment.created_by.name}}</td>
+        <td>{{assignment.assigned_to.name}}</td>
+        <td><a ng-href="#/assignments/{{assignment.id}}">Details</a></td>
+	    </tr>
+	  </tbody>
+	</table>
+</section>

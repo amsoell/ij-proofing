@@ -1,0 +1,14 @@
+<section id="login">
+  <form ng-submit="authenticate()">
+    <div class="grid">
+      <div class="grid-item medium-two-thirds">
+        <fieldset class="fieldset-border">
+          <legend>Login</legend>
+	        <label for="username">Email Address</label> <input name="username" id="username" type="text" ng-model="user.username" /><br />
+	        <label for="password">Password</label> <input name="password" id="password" type="password" ng-model="user.password" />
+	        <input type="submit" class="button button-mini button-primary" value="Login" />
+        </fieldset>
+      </div>
+    </div>
+  </form>
+</section>

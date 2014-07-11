@@ -1,0 +1,12 @@
+<SCRIPT LANGUAGE=VBScript RUNAT=Server>
+
+Sub Application_OnStart
+  Application.lock
+
+  Set Application("objConnection") = Server.CreateObject("ADODB.Connection")
+  Application("objConnection").ConnectionString = ""
+  Application("objConnection").open
+  
+  Application.Unlock
+End Sub
+</SCRIPT>

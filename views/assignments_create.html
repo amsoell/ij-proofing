@@ -1,0 +1,14 @@
+<section>
+  <h3>New Proofing Assignment</h1>
+  <form name="assignments_new">
+    <label for="description">Description</label> <input name="description" id="description" ng-model="assignment.description" type="text" ng-maxlength="100" placeholder="Short description of project" />
+    <div class="error" ng-show="assignments_new.description.$dirty && assignments_new.description.$invalid">
+      <small class="error" ng-show="assignments_new.description.$error.required">You must enter a description</small>
+      <small class="error" ng-show="assignments_new.description.$error.maxlength">Please limit your description to 100 characters (currently {{description.length}}).</small>                
+    </div>
+    <button class="button button-mini button-primary" ng-click="createAssignment()">Create</button>
+    <button class="button button-mini" cancel>Cancel</button>
+    
+  </form>
+  {{assignment.description}}
+</section>

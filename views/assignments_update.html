@@ -1,0 +1,16 @@
+<section>
+  <form name="proofing_assignment">
+    <label for="description">Description</label> <input name="description" id="description" type="text" ng-maxlength="100" placeholder="Short description of project" ng-model="assignment.description" required />
+    <div class="error" ng-show="proofing_assignment.description.$dirty && proofing_assignment.description.$invalid">
+      <small class="error" ng-show="proofing_assignment.description.$error.required">You must enter a description</small>
+      <small class="error" ng-show="proofing_assignment.description.$error.maxlength">Please limit your description to 100 characters (currently {{description.length}}).</small>                
+    </div>
+    <label for="restrictto">Restrict to</label> 
+      <select name="restrictto" id="restrictto" ng-model="assignment.restrictto" required>
+        <option value="0" ng-selected="assignment.restrictto==0"></option>
+        <option value="1" ng-selected="assignment.restrictto==1">Internal proofers</option>
+        <option value="2" ng-selected="assignment.restrictto==2">External proofers</option>
+      </select>
+    <button class="button button-mini button-primary" ng-click="updateAssignment()">Save</button>
+  </form>
+</section>
