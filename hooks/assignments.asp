@@ -1,43 +1,66 @@
+<!--#include file="authcheck.asp" -->
 <%
   Set objConn = Application("objConnection")
 
   if request("id")>0 then 
-    sqlx = "SELECT t.id, t.Description, t.RestrictTo, t.CreationDate, t.CreatedBy, c.Username AS CreatedByName, t.AssignedTo, a.Username AS AssignedToName FROM Task t LEFT JOIN Users c ON t.CreatedBy=c.id LEFT JOIN Users a ON t.AssignedTo=a.id WHERE t.id=" & request("id")
+    sqlx = "SELECT t.id, t.Description, t.ExpectedDelivery, t.RequestedReturn, t.CreationDate, t.CreatedBy AS CreatedById, c.Username AS CreatedByUsername, c.Fullname AS CreatedByFullname, c.Email as CreatedByEmail, t.AssignedTo AS AssignedToId, a.Username AS AssignedToUsername, a.Fullname AS AssignedToFullname, a.Email AS AssignedToEmail, t.CompletionDate, t.TimeToComplete FROM Task t LEFT JOIN [User] c ON t.CreatedBy=c.id LEFT JOIN [User] a ON t.AssignedTo=a.id WHERE t.id=" & request("id")
     Set rs = objConn.execute(sqlx)
     
     if not rs.eof then 
       response.write "{ ""success"": true, ""assignment"":  "
-      description = rs("description")
-      restrictto = rs("RestrictTo")
-      id = rs("id")
 
-      creation_date = rs("CreationDate")
-      created_by = rs("CreatedBy")
-      created_by_name = rs("CreatedByName")
-      assigned_to = rs("AssignedTo")
-      assigned_to_name = rs("AssignedToName")
+      id                        = rs("id")
+      description               = rs("description")
+      expected_delivery         = rs("ExpectedDelivery")
+      requested_return          = rs("RequestedReturn")
+      creation_date             = rs("CreationDate")
+      created_by_id             = rs("CreatedById")
+        created_by_email        = rs("CreatedByEmail")
+        created_by_username     = rs("CreatedByUsername")
+        created_by_fullname     = rs("CreatedByFullname")
+      
+      assigned_to_id            = rs("AssignedToId")
+      if not IsNull(assigned_to_id) then
+        assigned_to_email       = rs("AssignedToEmail")
+        assigned_to_name        = rs("AssignedToUsername")
+        assigned_to_fullname    = rs("AssignedToFullname")
+      end if
+      completion_date           = rs("CompletionDate")
+      time_to_complete          = rs("TimeToComplete")
 %>
     {
+        "success": true,
         "id": <%=id%>,
         "description": "<%=replace(description, """", "\""")%>",
-<%  if IsNull(restrictto) then %>
-        "restrictto": null,
-<%  else  %>
-        "restrictto": <%=restrictto%>,
-<%  end if %>
+        "expected_delivery": "<%=replace(expected_delivery&"", """", "\""")%>",
+        "requested_return": "<%=replace(requested_return&"", """", "\""")%>",
         "creation_date": "<%=creation_date%>",
         "created_by": {
-            "id": <%=created_by%>,
-            "name": "<%=replace(created_by_name, """", "\""")%>"
-        },
-<%   if IsNull(assigned_to) then  %>
-        "assigned_to": null
+          "id": <%=created_by_id%>,
+          "username": "<%=replace(created_by_username, """", "\""")%>",
+          "fullname": "<%=replace(created_by_fullname, """", "\""")%>",
+          "email": "<%=replace(created_by_email, """", "\""")%>"  
+        },              
+<%   if IsNull(assigned_to_id) then  %>
+        "assigned_to": null,
 <%   else  %>
         "assigned_to": {
-          "id": <%=assigned_to%>,
-          "name": "<%=replace("assigned_to_name", """", "\""")%>"  
-        }
+          "id": <%=assigned_to_id%>,
+          "username": "<%=replace(assigned_to_username, """", "\""")%>",
+          "fullname": "<%=replace(assigned_to_fullname, """", "\""")%>",
+          "email": "<%=replace(assigned_to_email, """", "\""")%>"                
+        },
 <%   end if  %>
+<%   if IsNull(completion_date) then %>
+        "completion_date": null,
+<%   else %>
+        "completion_date": "<%=completion_date%>",
+<%   end if %>
+<%   if IsNull(time_to_complete) then %>
+        "time_to_complete": null
+<%   else %>
+        "time_to_complete": <%=time_to_complete%>
+<%   end if %>
     }
 <%
       response.write " }"
@@ -45,44 +68,73 @@
       response.write "{ ""success"": false }"
     end if
   else 
-    sqlx = "SELECT t.id, t.Description, t.RestrictTo, t.CreationDate, t.CreatedBy, c.Username AS CreatedByName, t.AssignedTo, a.Username AS AssignedToName FROM Task t LEFT JOIN Users c ON t.CreatedBy=c.id LEFT JOIN Users a ON t.AssignedTo=a.id "
+    sqlx = "SELECT t.id, t.Description, t.ExpectedDelivery, t.RequestedReturn, t.CreationDate, t.CreatedBy AS CreatedById, c.Username AS CreatedByUsername, c.Fullname AS CreatedByFullname, c.Email as CreatedByEmail, t.AssignedTo AS AssignedToId, a.Username AS AssignedToUsername, a.Fullname AS AssignedToFullname, a.Email AS AssignedToEmail, t.CompletionDate, t.TimeToComplete FROM Task t LEFT JOIN [User] c ON t.CreatedBy=c.id LEFT JOIN [User] a ON t.AssignedTo=a.id"
+
     Set rs = objConn.execute(sqlx)
     
     if not rs.eof then 
       response.write "{ ""success"": true, ""assignments"": [ "
       while not rs.eof
-        description = rs("description")
-        restrictto = rs("RestrictTo")
-        id = rs("id")
-
-        creation_date = rs("CreationDate")
-        created_by = rs("CreatedBy")
-        created_by_name = rs("CreatedByName")
-        assigned_to = rs("AssignedTo")
-        assigned_to_name = rs("AssignedToName")
+        id                  = rs("id")
+        description         = rs("description")
+        expected_delivery   = rs("ExpectedDelivery")
+        requested_return    = rs("RequestedReturn")
+        creation_date       = rs("CreationDate")
+        created_by_id             = rs("CreatedById")
+          created_by_email        = rs("CreatedByEmail")
+          created_by_username     = rs("CreatedByUsername")
+          created_by_fullname     = rs("CreatedByFullname")
+        
+        assigned_to_id            = rs("AssignedToId")
+        if not IsNull(assigned_to_id) then
+          assigned_to_email       = rs("AssignedToEmail")
+          assigned_to_name        = rs("AssignedToUsername")
+          assigned_to_fullname    = rs("AssignedToFullname")
+        end if
+        completion_date     = rs("CompletionDate")
+        time_to_complete    = rs("TimeToComplete")
+        
+        if isnull(assigned_to_id) then
+          status = "Available"
+        elseif isnull(completion_date) then
+          status = "Claimed"
+        else
+          status = "Completed"
+        end if
 %>
     {
         "id": <%=id%>,
         "description": "<%=replace(description, """", "\""")%>",
-<%      if IsNull(restrictto) then %>
-        "restrictto": null,
-<%      else  %>
-        "restrictto": <%=restrictto%>,
-<%      end if %>
-
+        "expected_delivery": "<%=replace(expected_delivery&"", """", "\""")%>",
+        "requested_return": "<%=replace(requested_return&"", """", "\""")%>",        
         "creation_date": "<%=creation_date%>",
         "created_by": {
-            "id": <%=created_by%>,
-            "name": "<%=replace(created_by_name, """", "\""")%>"
-        },
-<%   if IsNull(assigned_to) then  %>
-        "assigned_to": null
+          "id": <%=created_by_id%>,
+          "username": "<%=replace(created_by_username, """", "\""")%>",
+          "fullname": "<%=replace(created_by_fullname, """", "\""")%>",
+          "email": "<%=replace(created_by_email, """", "\""")%>"  
+        },              
+<%   if IsNull(assigned_to_id) then  %>
+        "assigned_to": null,
 <%   else  %>
         "assigned_to": {
-          "id": <%=assigned_to%>,
-          "name": "<%=replace("assigned_to_name", """", "\""")%>"  
-        }
+          "id": <%=assigned_to_id%>,
+          "username": "<%=replace(assigned_to_username, """", "\""")%>",
+          "fullname": "<%=replace(assigned_to_fullname, """", "\""")%>",
+          "email": "<%=replace(assigned_to_email, """", "\""")%>"                
+        },
 <%   end if  %>
+        "status": "<%=status%>",
+<%   if IsNull(completion_date) then %>
+        "completion_date": null,
+<%   else %>
+        "completion_date": "<%=completion_date%>",
+<%   end if %>        
+<%   if IsNull(time_to_complete) then %>
+        "time_to_complete": null
+<%   else %>
+        "time_to_complete": <%=time_to_complete%>
+<%   end if %>        
     }
 <%
         rs.movenext

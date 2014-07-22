@@ -1,0 +1,21 @@
+<section>
+  <form name="proofing_user">
+    <label for="description">Username</label> <input name="username" id="username" type="text" ng-maxlength="20" placeholder="Username" ng-model="user.username" required />
+      <div class="error" ng-show="proofing_user.username.$dirty && proofing_user.username.$invalid"><small class="error" ng-show="proofing_user.username.$error.required">You must enter a username</small><small class="error" ng-show="proofing_user.username.$error.maxlength">Please limit your username to 20 characters.</small></div>
+    <label for="fullname">Full name</label> <input name="fullname" id="fullname" type="text" ng-maxlength="50" placeholder="Chip Mellor" ng-model="user.fullname" required />
+      <div class="error" ng-show="proofing_user.fullname.$dirty && proofing_user.fullname.$invalid"><small class="error" ng-show="proofing_user.fullname.$error.required">You must enter a full name</small><small class="error" ng-show="proofing_user.fullname.$error.maxlength">Full name must be less than 50 characters</small></div>
+    <label for="email">Email address</label> <input name="email" id="email" type="text" ng-maxlength="50" placeholder="name@something.com" ng-model="user.email" required />
+      <div class="error" ng-show="proofing_user.email.$dirty && proofing_user.email.$invalid"><small class="error" ng-show="proofing_user.email.$error.required">You must enter an email address</small><small class="error" ng-show="proofing_user.email.$error.email">Please enter a valid email address.</small></div>
+    <label for="password">Password</label> <input name="password" id="password" type="password" ng-maxlength="36" ng-minlength="6" placeholder="password" ng-model="user.password" required />
+      <div class="error" ng-show="proofing_user.password.$dirty && proofing_user.password.$invalid"><small class="error" ng-show="proofing_user.password.$error.required">You must enter a password</small><small class="error" ng-show="proofing_user.password.$error.maxlength">Please limit your password to 36 characters</small><small class="error" ng-show="proofing_user.password.$error.minlength">Your password must be at least 6 characters</small></div>
+    <label for="administrator">Make administrator</label> <input type="checkbox" name="administrator" id="administrator" ng-model="user.administrator" />
+    <br />
+    <button class="button button-primary" ng-click="createUser()">Save</button>  
+    <button cancel-click class="button">Cancel</button>    
+  </form>
+</section>
+
+<debug>
+  New user:<br />
+	{{user}}
+</debug>

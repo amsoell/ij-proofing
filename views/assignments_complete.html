@@ -1,0 +1,17 @@
+<section>
+  <form name="proofing_assignment">
+    <label for="description">Description</label> {{assignment.description}}<br />
+    <label for="expected_delivery">Expected delivery</label> {{assignment.expected_delivery}}<br />
+    <label for="expected_delivery">Requested return</label> {{assignment.requested_return}}<br />
+    <label for="time_to_complete">Time to complete</label> <input name="time_to_complete" id="time_to_complete" type="number" placeholder="Hours to complete" ng-model="assignment.time_to_complete" required />
+      <div class="error" ng-show="proofing_assignment.time_to_complete.$dirty && proofing_assignment.time_to_complete.$invalid"><small class="error" ng-show="proofing_assignment.time_to_complete.$error.required">You must enter the time required to complete the assignment</small><small class="error" ng-show="proofing_assignment.time_to_complete.$error.number">Please enter a number.</small></div>
+    <button class="button button-primary" ng-click="completeAssignment()">Save</button>
+    <button cancel-click class="button">Cancel</button>    
+  </form>
+</section>
+<debug>
+  Selected assignment details:<br />
+	{{assignment}}<br />
+	Authenticated user:<br />
+	{{user.username}}
+</debug>

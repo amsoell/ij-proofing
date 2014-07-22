@@ -1,10 +1,10 @@
-nav {
+header nav {
   border-bottom: 1px solid #EFEFEF;
   background-color: #F8F8F8;
   margin: auto 0.3rem;
 }
 
-nav li {
+header nav li {
   display: inline;
   display: inline-block;
   padding: 0.3rem 1rem;
@@ -12,4 +12,29 @@ nav li {
 
 section {
   padding: 1rem 2rem;
+}
+
+th.sorted {
+}
+
+th.sorted.asc:after {
+  padding-right: 5px;
+  content:'  \25B2';
+}
+
+th.sorted.desc:after {
+  padding-right: 5px;
+  content: '  \25BC';
+}
+
+aside.error {
+  color: #900;
+  font-style:italic;
+  text-align:center;
+  font-size:0.8em;
+  line-height:1em;
+}
+
+.button.red {
+  background-color: #FCB3CE;
 }

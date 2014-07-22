@@ -1,0 +1,27 @@
+<section id="users" ng-init="getUsers()">
+  <a href="#/users/create" class="button button-primary" ng-show="currentUser.administrator">New User</a><br />
+  <br /><br />
+	<table class="table-border table-stripes">
+	  <thead>
+	    <tr>
+	      <th ng-click="predicate='username';reverse=!reverse" ng-class="{ sorted: predicate=='username', asc: !reverse, desc: reverse }">Username</th>
+	      <th ng-click="predicate='fullname';reverse=!reverse" ng-class="{ sorted: predicate=='fullname', asc: !reverse, desc: reverse }">Fullname</th>
+	      <th ng-click="predicate='email';reverse=!reverse" ng-class="{ sorted: predicate=='email', asc: !reverse, desc: reverse }">Email</th>
+	      <th ng-show="currentUser.administrator">Details</th>
+	    </tr>
+	  </thead>
+	  <tbody>
+	    <tr ng-repeat="user in users | orderBy:predicate:reverse" ng-controller="UserController" ng-init="load($parent.user)">
+	      <td>{{user.username}}</td>
+        <td>{{user.fullname}}</td>
+        <td>{{user.email}}</td>
+        <td ng-show="currentUser.administrator"><a ng-href="#/users/{{user.id}}/update">Update</a></td>
+	    </tr>
+	  </tbody>
+	</table>
+</section>
+
+<debug>
+  New user:<br />
+	{{currentUser}}
+</debug>

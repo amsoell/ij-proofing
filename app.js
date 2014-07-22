@@ -1,3 +1,5 @@
+/*global angular */
+
 angular.module('proofing.controllers', []);
 angular.module('proofing.filters', []);
 angular.module('proofing.directives', []);
@@ -18,27 +20,56 @@ var $app = angular.module('proofing',[
   $routeProvider.when('/assignments', {
     templateUrl: 'views/assignments.html',
     controller: 'ListingController',
+    title: 'Assignments',
     requireAuth: true
   }).when('/assignments/create', {
     templateUrl: 'views/assignments_create.html',
     controller: 'AssignmentController',
+    title: 'Create',
     requireAuth: true
   }).when('/assignments/:assignmentId', {
     templateUrl: 'views/assignments_details.html',
     controller: 'AssignmentController',
+    title: 'Details',
     requireAuth: true
   }).when('/assignments/:assignmentId/update', {
     templateUrl: 'views/assignments_update.html',
     controller: 'AssignmentController',
+    title: 'Update',
+    requireAuth: true
+  }).when('/assignments/:assignmentId/complete', {
+    templateUrl: 'views/assignments_complete.html',
+    controller: 'AssignmentController',
+    title: 'Complete Assignment',
+    requireAuth: true
+  }).when('/users', {
+    templateUrl: 'views/users.html',
+    controller: 'UserController',
+    title: 'Users',
+    requireAuth: true
+  }).when('/users/create', {
+    templateUrl: 'views/users_create.html',
+    controller: 'UserController',
+    title: 'Create',
+    requireAuth: true    
+  }).when('/users/:userId', {
+    templateUrl: 'views/users_details.html',
+    controller: 'UserController',
+    title: 'User Profile',
+    requireAuth: true
+  }).when('/users/:userId/update', {
+    templateUrl: 'views/users_update.html',
+    controller: 'UserController',
+    title: 'Update',
     requireAuth: true
   }).otherwise({
     templateUrl: 'views/login.html',
-    controller: 'LoginController'
+    controller: 'LoginController',
+    title: "Login"
   });
 }]).run(function($rootScope, $location, $cookies, AuthenticationService) {
   $rootScope.$on('$routeChangeStart', function(event, next, current) {
     if (!(next.requireAuth && (AuthenticationService.authenticated || $cookies.authenticated))) {
-    console.log('redirecting to login');
       // requireAuth = true, authenticated = true: fail
       // requireAuth = true, authendicated = false: true
       // requireAuth = false, authenticated = true: true
@@ -46,5 +77,12 @@ var $app = angular.module('proofing',[
       // User is not logged in
       $location.path('/');
     }
-  })
+  });
+  $rootScope.$on('$routeChangeSuccess', function(event, current, previous) {
+    $rootScope.pageTitle = current.title;
+  });
+});
+
+$app.run(function($rootScope) {
+  $rootScope.debugMode = true;
 });
