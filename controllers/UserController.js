@@ -1,6 +1,6 @@
 /*global $app, $location */
 
-$app.controller('UserController', ['$scope', '$routeParams', '$location', '$http', 'AuthenticationService', function($scope, $routeParams, $location, $http, Auth) { 
+$app.controller('UserController', ['$scope', '$routeParams', '$location', '$http', 'AuthenticationService', function($scope, $routeParams, $location, $http, Auth, transformRequestAsFormPost) { 
   $scope.user = null;
   $scope.users = {};
   $scope.currentUser = Auth.getUser();  
@@ -44,7 +44,8 @@ $app.controller('UserController', ['$scope', '$routeParams', '$location', '$http
   
   $scope.createUser = function() {
     $http({
-      method: 'GET',
+      method: 'POST',
+      transformRequest: transformRequestAsFormPost,
       url: '/hooks/users_create.asp',
       params: $scope.user
     }).success(function(data) {
@@ -62,7 +63,8 @@ $app.controller('UserController', ['$scope', '$routeParams', '$location', '$http
   
   $scope.updateUser = function() {
     $http({
-      method: 'GET',
+      method: 'POST',
+      transformRequest: transformRequestAsFormPost,
       url: '/hooks/users_update.asp', 
       params: $scope.user
     }).success(function(data) {
@@ -81,7 +83,8 @@ $app.controller('UserController', ['$scope', '$routeParams', '$location', '$http
   
   $scope.deleteUser = function(id) {
     $http({
-      method: 'GET',
+      method: 'POST',
+      transformRequest: transformRequestAsFormPost,
       url: '/hooks/users_delete.asp',
       params: $scope.user
     }).success(function(data) {

@@ -14,6 +14,11 @@ section {
   padding: 1rem 2rem;
 }
 
+thead th:hover {
+  cursor: pointer;
+  text-decoration: underline;
+}
+
 th.sorted {
 }
 
@@ -37,4 +42,8 @@ aside.error {
 
 .button.red {
   background-color: #FCB3CE;
+}
+
+[ng\:cloak], [ng-cloak], [data-ng-cloak], [x-ng-cloak], .ng-cloak, .x-ng-cloak {
+  display: none !important;
 }

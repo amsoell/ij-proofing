@@ -1,13 +1,13 @@
 <section>
   <h3>New Proofing Assignment</h1>
-  <form name="assignments_new">
+  <form name="assignments_new" novalidate ng-submit="assignments_new.$valid && assignments_new.submit()">
     <label for="description">Description</label> <input name="description" id="description" type="text" ng-maxlength="100" placeholder="Short description of project" ng-model="assignment.description" required />
       <div class="error" ng-show="proofing_assignment.description.$dirty && proofing_assignment.description.$invalid"><small class="error" ng-show="proofing_assignment.description.$error.required">You must enter a description</small><small class="error" ng-show="proofing_assignment.description.$error.maxlength">Please limit your description to 100 characters.</small></div>
     <label for="expected_delivery">Expected delivery</label> <input name="expected_delivery" id="expected_delivery" type="text" ng-maxlength="250" placeholder="When you expect the initial copy to be ready for proofing" ng-model="assignment.expected_delivery" required />
       <div class="error" ng-show="proofing_assignment.expected_delivery.$dirty && proofing_assignment.expected_delivery.$invalid"><small class="error" ng-show="proofing_assignment.expected_delivery.$error.required">You must enter an expected delivery date</small><small class="error" ng-show="proofing_assignment.expected_delivery.$error.maxlength">Please limit your expected delivery date to 250 characters.</small></div>
     <label for="expected_delivery">Requested return</label> <input name="requested_return" id="requested_return" type="text" ng-maxlength="250" placeholder="(e.g. ASAP, One week)" ng-model="assignment.requested_return" required />
       <div class="error" ng-show="proofing_assignment.requested_return.$dirty && proofing_assignment.requested_return.$invalid"><small class="error" ng-show="proofing_assignment.requested_return.$error.required">You must enter a requested return date</small><small class="error" ng-show="proofing_assignment.requested_return.$error.maxlength">Please limit your requested return date to 250 characters.</small></div>
-    <button class="button button-primary" ng-click="createAssignment()">Create</button>
-    <button class="button" cancel-click>Cancel</button>
+    <a class="button button-primary" ng-click="createAssignment()" ng-disabled="assignments_new.$invalid">Create</a>
+    <a class="button" cancel-click>Cancel</a>
   </form>
 </section>

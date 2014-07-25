@@ -1,18 +1,17 @@
 <section>
-  <form name="proofing_user" autocomplete="off">
+  <form name="proofing_user" autocomplete="off" novalidate ng-submit="proofing_user.$valid && proofing_user.submit()">
     <label for="description">Username</label> <input name="username" id="username" type="text" ng-maxlength="20" placeholder="Username" ng-model="user.username" required />
       <div class="error" ng-show="proofing_user.username.$dirty && proofing_user.username.$invalid"><small class="error" ng-show="proofing_user.username.$error.required">You must enter a username</small><small class="error" ng-show="proofing_user.username.$error.maxlength">Please limit your username to 20 characters.</small></div>
     <label for="fullname">Full name</label> <input name="fullname" id="fullname" type="text" ng-maxlength="50" placeholder="Users full name" ng-model="user.fullname" required />
       <div class="error" ng-show="proofing_user.fullname.$dirty && proofing_user.fullname.$invalid"><small class="error" ng-show="proofing_user.fullname.$error.required">You must enter the user's full name</small><small class="error" ng-show="proofing_user.fullname.$error.maxlength">Please limit your fullname to 50 characters.</small></div>
     <label for="email">Email address</label> <input name="email" id="email" type="text" ng-maxlength="50" placeholder="name@something.com" ng-model="user.email" required />
       <div class="error" ng-show="proofing_user.email.$dirty && proofing_user.email.$invalid"><small class="error" ng-show="proofing_user.email.$error.required">You must enter an email address</small><small class="error" ng-show="proofing_user.email.$error.email">Please enter a valid email address.</small><small class="error" ng-show="proofing_user.email.$error.maxlength">Please limit your email address to 50 characters.</small></div>
-    <label for="password">Password</label> <input name="password" id="password" type="password" ng-maxlength="36" ng-minlength="6" placeholder="password" ng-model="user.password" autocomplete="off" required />
-      <div>Leave blank to keep unchanged</div>
+    <label for="password">Password</label> <input name="password" id="password" type="password" ng-maxlength="36" ng-minlength="6" placeholder="Leave blank to keep unchanged" ng-model="user.password" autocomplete="off" />
       <div class="error" ng-show="proofing_user.password.$dirty && proofing_user.password.$invalid"><small class="error" ng-show="proofing_user.password.$error.required">You must enter a password</small><small class="error" ng-show="proofing_user.password.$error.maxlength">Please limit your password to 36 characters</small><small class="error" ng-show="proofing_user.password.$error.minlength">Your password must be at least 6 characters</small></div>
       
     <br />
-    <button class="button button-primary" ng-click="updateUser()">Update</button>
-    <button class="button button-primary red" confirm-click="deleteUser()" title="Are you sure you want to delete this user? Assignments created by this user will be removed and assignments claimed by this user will be unclaimed. This action cannot be undone">Delete</button>    
-    <button cancel-click class="button">Cancel</button>    
+    <a class="button button-primary" ng-click="updateUser()" ng-disabled="proofing_user.$invalid">Update</a>
+    <a class="button button-primary red" confirm-click="deleteUser()" title="Are you sure you want to delete this user? Assignments created by this user will be removed and assignments claimed by this user will be unclaimed. This action cannot be undone">Delete</a>    
+    <a cancel-click class="button">Cancel</a>    
   </form>
 </section>

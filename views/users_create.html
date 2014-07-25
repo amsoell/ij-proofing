@@ -1,5 +1,5 @@
 <section>
-  <form name="proofing_user">
+  <form name="proofing_user" novalidate ng-submit="proofing_user.$valid && proofing_user.submit()">
     <label for="description">Username</label> <input name="username" id="username" type="text" ng-maxlength="20" placeholder="Username" ng-model="user.username" required />
       <div class="error" ng-show="proofing_user.username.$dirty && proofing_user.username.$invalid"><small class="error" ng-show="proofing_user.username.$error.required">You must enter a username</small><small class="error" ng-show="proofing_user.username.$error.maxlength">Please limit your username to 20 characters.</small></div>
     <label for="fullname">Full name</label> <input name="fullname" id="fullname" type="text" ng-maxlength="50" placeholder="Chip Mellor" ng-model="user.fullname" required />
@@ -10,8 +10,8 @@
       <div class="error" ng-show="proofing_user.password.$dirty && proofing_user.password.$invalid"><small class="error" ng-show="proofing_user.password.$error.required">You must enter a password</small><small class="error" ng-show="proofing_user.password.$error.maxlength">Please limit your password to 36 characters</small><small class="error" ng-show="proofing_user.password.$error.minlength">Your password must be at least 6 characters</small></div>
     <label for="administrator">Make administrator</label> <input type="checkbox" name="administrator" id="administrator" ng-model="user.administrator" />
     <br />
-    <button class="button button-primary" ng-click="createUser()">Save</button>  
-    <button cancel-click class="button">Cancel</button>    
+    <a class="button button-primary" ng-click="createUser()" ng-disabled="proofing_user.$invalid">Save</a>  
+    <a cancel-click class="button">Cancel</a>    
   </form>
 </section>
 

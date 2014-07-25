@@ -1,6 +1,6 @@
 /*global $app, $location */
 
-$app.controller('AssignmentController', ['$scope', '$routeParams', '$location', '$http', 'AuthenticationService', function($scope, $routeParams, $location, $http, Auth) { 
+$app.controller('AssignmentController', ['$scope', '$routeParams', '$location', '$http', 'AuthenticationService', function($scope, $routeParams, $location, $http, Auth, transformRequestAsFormPost) { 
   $scope.user = Auth.getUser();
 
   $scope.load = function($o) {
@@ -42,7 +42,8 @@ $app.controller('AssignmentController', ['$scope', '$routeParams', '$location', 
   $scope.createAssignment = function() {
     console.log($scope.assignment);
     $http({
-      method: 'GET',
+      method: 'POST',
+      transformRequest: transformRequestAsFormPost,
       url: '/hooks/assignments_create.asp',
       params: $scope.assignment
     }).success(function(data) {
@@ -60,7 +61,8 @@ $app.controller('AssignmentController', ['$scope', '$routeParams', '$location', 
   
   $scope.updateAssignment = function() {
     $http({
-      method: 'GET',
+      method: 'POST',
+      transformRequest: transformRequestAsFormPost,
       url: '/hooks/assignments_update.asp', 
       params: $scope.assignment
     }).success(function(data) {
@@ -79,7 +81,8 @@ $app.controller('AssignmentController', ['$scope', '$routeParams', '$location', 
   
   $scope.deleteAssignment = function(id) {
     $http({
-      method: 'GET',
+      method: 'POST',
+      transformRequest: transformRequestAsFormPost,
       url: '/hooks/assignments_delete.asp',
       params: {
         id: id
@@ -99,7 +102,8 @@ $app.controller('AssignmentController', ['$scope', '$routeParams', '$location', 
   
   $scope.claimAssignment = function() {
     $http({
-      method: 'GET',
+      method: 'POST',
+      transformRequest: transformRequestAsFormPost,
       url: '/hooks/assignments_claim.asp',
       params: {
         id: $scope.assignment.id
@@ -120,7 +124,8 @@ $app.controller('AssignmentController', ['$scope', '$routeParams', '$location', 
   
   $scope.unclaimAssignment = function() {
     $http({
-      method: 'GET',
+      method: 'POST',
+      transformRequest: transformRequestAsFormPost,
       url: '/hooks/assignments_unclaim.asp',
       params: {
         id: $scope.assignment.id
@@ -141,7 +146,8 @@ $app.controller('AssignmentController', ['$scope', '$routeParams', '$location', 
   
   $scope.completeAssignment = function() {
     $http({
-      method: 'GET',
+      method: 'POST',
+      transformRequest: transformRequestAsFormPost,
       url: '/hooks/assignments_complete.asp', 
       params: $scope.assignment
     }).success(function(data) {
