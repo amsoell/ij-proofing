@@ -1,23 +1,25 @@
+<nav ng-include="'views/nav.html'"></nav>
 <section ng-cloak>
   <h3>{{assignment.description}}</h1>
+  Summary: {{assignment.summary}}<br />
   Expected delivery: {{assignment.expected_delivery}}<br />
   Requested return: {{assignment.requested_return}}<br />
   Created: {{assignment.creation_date}}<br />
   Created by: {{assignment.created_by.fullname}}<br />
   <span ng-show="assignment.assigned_to">Assigned to: {{assignment.assigned_to.fullname}}</span><br />
-  <span ng-show="assignment.time_to_complete">Time to complete: {{assignment.time_to_complete}}</span><br />  
+  <span ng-show="assignment.time_to_complete">Time to complete: {{assignment.time_to_complete}}</span><br />
   <span ng-show="!assignment.completion_date && assignment.assigned_to && (assignment.isMine || assignment.isClaimedByMe)">
     <a class="button button-mini button-primary" ng-href="#/assignments/{{assignment.id}}/complete">Mark completed</a>
     <a class="button button-mini" ng-click="unclaimAssignment()">Unclaim</a>
   </span>
-  <span ng-show="assignment.isMine">
-    <a class="button button-mini" ng-class="button-primary: false" ng-href="#/assignments/{{assignment.id}}/update">Update</a> 
-    <a class="button button-mini" confirm-click="deleteAssignment(assignment.id)" title="Are you sure you want to delete this assignment?">Delete</a>   
+  <span ng-show="user.administrator>1 || assignment.isMine">
+    <a class="button button-mini" ng-class="button-primary: false" ng-href="#/assignments/{{assignment.id}}/update">Update</a>
+    <a class="button button-mini" confirm-click="deleteAssignment(assignment.id)" title="Are you sure you want to delete this assignment?">Delete</a>
   </span>
   <span ng-hide="assignment.assigned_to || assignment.isMine || assignment.isClaimedByMe">
     <a class="button button-mini button-primary" ng-click="claimAssignment()">Claim</a>
   </span>
-  <a class="button button-mini" cancel-click>Back</a>     
+  <a class="button button-mini" cancel-click>Back</a>
 </section>
 <debug>
   Selected assignment details:<br />

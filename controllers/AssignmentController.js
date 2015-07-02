@@ -1,6 +1,6 @@
 /*global $app, $location */
 
-$app.controller('AssignmentController', ['$scope', '$routeParams', '$location', '$http', 'AuthenticationService', function($scope, $routeParams, $location, $http, Auth, transformRequestAsFormPost) { 
+$app.controller('AssignmentController', ['$scope', '$routeParams', '$location', '$http', 'AuthenticationService', function($scope, $routeParams, $location, $http, Auth, transformRequestAsFormPost) {
   $scope.user = Auth.getUser();
 
   $scope.load = function($o) {
@@ -13,8 +13,8 @@ $app.controller('AssignmentController', ['$scope', '$routeParams', '$location', 
         if (data.authenticated===false) {
           $location.path('/login');
         } else if (data.success) {
-          $scope.assignment = data.assignment;      
-          
+          $scope.assignment = data.assignment;
+
           var user = Auth.getUser();
           console.log("User:");
           console.log(user);
@@ -28,7 +28,7 @@ $app.controller('AssignmentController', ['$scope', '$routeParams', '$location', 
           }
           console.log(user);
         } else {
-          
+
         }
 
       }).error(function(data) {
@@ -38,7 +38,7 @@ $app.controller('AssignmentController', ['$scope', '$routeParams', '$location', 
       $scope.assignment = {};
     }
   };
-  
+
   $scope.createAssignment = function() {
     console.log($scope.assignment);
     $http({
@@ -52,36 +52,36 @@ $app.controller('AssignmentController', ['$scope', '$routeParams', '$location', 
       } else if (data.success) {
         $location.path('/assignments');
       } else {
-        
+
       }
     }).error(function(data) {
-      
+
     });
   };
-  
+
   $scope.updateAssignment = function() {
     $http({
       method: 'POST',
       transformRequest: transformRequestAsFormPost,
-      url: '/hooks/assignments_update.asp', 
+      url: '/hooks/assignments_update.asp',
       params: $scope.assignment
     }).success(function(data) {
       if (data.authenticated===false) {
           $location.path('/login');
       } else if (data.success) {
-        console.log('Assignment Updated');  
-        $location.path('/assignments');              
+        console.log('Assignment Updated');
+        $location.path('/assignments');
       } else {
-        console.log('Assignment could not be updated');      
+        console.log('Assignment could not be updated');
       }
     }).error(function() {
       console.log('Assignment could not be updated');
     });
   };
-  
+
   $scope.deleteAssignment = function(id) {
     $http({
-      method: 'POST',
+      method: 'GET',
       transformRequest: transformRequestAsFormPost,
       url: '/hooks/assignments_delete.asp',
       params: {
@@ -93,13 +93,13 @@ $app.controller('AssignmentController', ['$scope', '$routeParams', '$location', 
       } else if (data.success) {
         $location.path('/assignments');
       } else {
-        
+
       }
     }).error(function(data) {
-      
+
     });
   };
-  
+
   $scope.claimAssignment = function() {
     $http({
       method: 'POST',
@@ -115,13 +115,13 @@ $app.controller('AssignmentController', ['$scope', '$routeParams', '$location', 
         $scope.assignment = data.assignment;//.assigned_to      = data.assigned_to;
         $scope.assignment.isClaimedByMe    = true;
       } else {
-        
+
       }
     }).error(function(data) {
-      
+
     });
   };
-  
+
   $scope.unclaimAssignment = function() {
     $http({
       method: 'POST',
@@ -137,33 +137,33 @@ $app.controller('AssignmentController', ['$scope', '$routeParams', '$location', 
         $scope.assignment.assigned_to       = null;
         $scope.assignment.isClaimedByMe    = false;
       } else {
-        
+
       }
     }).error(function(data) {
-      
+
     });
-  };  
-  
+  };
+
   $scope.completeAssignment = function() {
     $http({
       method: 'POST',
       transformRequest: transformRequestAsFormPost,
-      url: '/hooks/assignments_complete.asp', 
+      url: '/hooks/assignments_complete.asp',
       params: $scope.assignment
     }).success(function(data) {
       if (data.authenticated===false) {
           $location.path('/login');
       } else if (data.success) {
-        console.log('Assignment Completed');  
-        $location.path('/assignments');              
+        console.log('Assignment Completed');
+        $location.path('/assignments');
       } else {
-        console.log('Assignment could not be completed');      
+        console.log('Assignment could not be completed');
       }
     }).error(function() {
       console.log('Assignment could not be completed');
     });
   };
-  
+
   if ($routeParams && (typeof $routeParams.assignmentId == "object")) {
     $scope.assignment = $routeParams.assignment;
   } else if ($routeParams && !isNaN($routeParams.assignmentId)) {

@@ -21,10 +21,9 @@ Sub Application_OnStart
   Application.lock
 
   Set Application("objConnection") = Server.CreateObject("ADODB.Connection")
-  Application("objConnection").ConnectionString = "DSN=TaskTracking;Uid=tasktracking;Pwd=UvQFmQy2PgTo"
+  Application("objConnection").ConnectionString = "DSN=xxx;Uid=xxx;Pwd=xxx"
   Application("objConnection").open
-'  Application("ijtime_server") = "timesheets_dev"
-  Application("SMTP_SERVER") = "10.1.10.75"
+  Application("SMTP_SERVER") = "xxx"
 
   Application.Unlock
 End Sub

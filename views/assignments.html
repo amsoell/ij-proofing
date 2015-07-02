@@ -1,5 +1,6 @@
+<nav ng-include="'views/nav.html'"></nav>
 <section id="assignments" ng-init="getAssignments()">
-  <a href="#/assignments/create" class="button button-primary">New Assignment</a><br />
+  <a href="#/assignments/create" class="button button-primary" ng-if="user.administrator>0">New Assignment</a><br />
   <label for="assignmentFilter">Show:</label> <select name="assignmentFilter" id="assignmentFilter" ng-model="assignmentFilter">
     <option value="">&mdash;ALL&mdash;</option>
     <option value="Available">Available</option>
@@ -12,16 +13,18 @@
 	    <tr>
 	      <th ng-click="predicate='description';reverse=!reverse" ng-class="{ sorted: predicate=='description', asc: !reverse, desc: reverse }">Description</th>
 	      <th ng-click="predicate='creation_date';reverse=!reverse" ng-class="{ sorted: predicate=='creation_date', asc: !reverse, desc: reverse }">Created</th>
-	      <th ng-click="predicate='created_by.name';reverse=!reverse" ng-class="{ sorted: predicate=='created_by.name', asc: !reverse, desc: reverse }">Created By</th>
-	      <th ng-click="predicate='assigned_to.name';reverse=!reverse" ng-class="{ sorted: predicate=='assigned_to.name', asc: !reverse, desc: reverse }">Assigned To</th>	      
+	      <th>Due</th>
+	      <th ng-click="predicate='created_by.fullname';reverse=!reverse" ng-class="{ sorted: predicate=='created_by.fullname', asc: !reverse, desc: reverse }">Requester</th>
+	      <th ng-click="predicate='assigned_to.fullname';reverse=!reverse" ng-class="{ sorted: predicate=='assigned_to.fullname', asc: !reverse, desc: reverse }">Proofer</th>
 	      <th ng-click="predicate='status';reverse=!reverse" ng-class="{ sorted: predicate=='status', asc: !reverse, desc: reverse }">Status</th>
 	      <th>Details</th>
 	    </tr>
 	  </thead>
 	  <tbody>
 	    <tr ng-repeat="assignment in assignments | filter: { status: assignmentFilter } | orderBy:predicate:reverse" ng-controller="AssignmentController" ng-init="load($parent.assignment)">
-	      <td>{{assignment.description}}</td>
-        <td>{{assignment.creation_date}}</td>
+	      <td title="{{assignment.summary}}">{{assignment.description}}</td>
+        <td>{{assignment.creation_date | date:'MMMM d, yyyy, h:mma'}}</td>
+        <td>{{assignment.requested_return}}</td>
         <td>{{assignment.created_by.fullname}}</td>
         <td>{{assignment.assigned_to.fullname}}</td>
         <td>{{assignment.status}}</td>
@@ -30,3 +33,7 @@
 	  </tbody>
 	</table>
 </section>
+<debug>
+	Authenticated user:<br />
+	{{user}}
+</debug>

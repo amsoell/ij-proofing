@@ -1,5 +1,8 @@
 /*global angular */
 
+//! Uncomment to force HTTPS connections
+//if (window.location.protocol != "https:") window.location.href = "https:" + window.location.href.substring(window.location.protocol.length);
+
 angular.module('proofing.controllers', []);
 angular.module('proofing.filters', []);
 angular.module('proofing.directives', []);
@@ -51,7 +54,7 @@ var $app = angular.module('proofing',[
     templateUrl: 'views/users_create.html',
     controller: 'UserController',
     title: 'Create',
-    requireAuth: true    
+    requireAuth: true
   }).when('/users/:userId', {
     templateUrl: 'views/users_details.html',
     controller: 'UserController',
@@ -69,13 +72,17 @@ var $app = angular.module('proofing',[
   });
 }]).run(function($rootScope, $location, $cookies, AuthenticationService) {
   $rootScope.$on('$routeChangeStart', function(event, next, current) {
-    if (!(next.requireAuth && (AuthenticationService.authenticated || $cookies.authenticated))) {
+    console.log('requireAuth = ' + next.requireAuth);
+    console.log('AuthenticationService.authenticated = '+AuthenticationService.isAuthenticated());
+    console.log('cookies.authenticated = '+$cookies.authenticated);
+    if (next.requireAuth && !((AuthenticationService.isAuthenticated()===true) || ($cookies.authenticated===true))) {
+      console.log('redirect to login');
       // requireAuth = true, authenticated = true: fail
       // requireAuth = true, authendicated = false: true
       // requireAuth = false, authenticated = true: true
       // requireAuth = false, authenticated = false: true
       // User is not logged in
-      $location.path('/');
+      window.location = "/";
     }
   });
   $rootScope.$on('$routeChangeSuccess', function(event, current, previous) {

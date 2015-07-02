@@ -1,9 +1,9 @@
 /*global $app, $location */
 
-$app.controller('UserController', ['$scope', '$routeParams', '$location', '$http', 'AuthenticationService', function($scope, $routeParams, $location, $http, Auth, transformRequestAsFormPost) { 
+$app.controller('UserController', ['$scope', '$routeParams', '$location', '$http', 'AuthenticationService', function($scope, $routeParams, $location, $http, Auth, transformRequestAsFormPost) {
   $scope.user = null;
   $scope.users = {};
-  $scope.currentUser = Auth.getUser();  
+  $scope.currentUser = Auth.getUser();
 
   $scope.load = function($o) {
     if (($o !== null) && (typeof $o === 'object')) {
@@ -15,9 +15,9 @@ $app.controller('UserController', ['$scope', '$routeParams', '$location', '$http
         if (data.authenticated===false) {
           $location.path('/login');
         } else if (data.success) {
-          $scope.user = data.user;      
+          $scope.user = data.user;
         } else {
-          
+
         }
 
       }).error(function(data) {
@@ -27,21 +27,21 @@ $app.controller('UserController', ['$scope', '$routeParams', '$location', '$http
       $scope.user = {};
     }
   };
-  
+
   $scope.getUsers = function() {
     $http.get('/hooks/users.asp').success(function(data) {
       if (data.authenticated===false) {
           $location.path('/login');
       } else if (data.success) {
-        $scope.users = data.users;        
+        $scope.users = data.users;
       } else {
-        
+
       }
 
     }).error(function(data) {
     });
-  };  
-  
+  };
+
   $scope.createUser = function() {
     $http({
       method: 'POST',
@@ -53,34 +53,34 @@ $app.controller('UserController', ['$scope', '$routeParams', '$location', '$http
           $location.path('/login');
       } else if (data.success) {
         $location.path('/users');
-      } else {
-        
+      } else if (data.success===false) {
+        alert('User not created: '+data.reason);
       }
     }).error(function(data) {
-      
-    });  
+
+    });
   };
-  
+
   $scope.updateUser = function() {
     $http({
       method: 'POST',
       transformRequest: transformRequestAsFormPost,
-      url: '/hooks/users_update.asp', 
+      url: '/hooks/users_update.asp',
       params: $scope.user
     }).success(function(data) {
       if (data.authenticated===false) {
           $location.path('/login');
       } else if (data.success) {
-        console.log('User Updated');  
-        $location.path('/users');              
+        console.log('User Updated');
+        $location.path('/users');
       } else {
-        console.log('User could not be updated');      
+        console.log('User could not be updated');
       }
     }).error(function() {
       console.log('User could not be updated');
     });
   };
-  
+
   $scope.deleteUser = function(id) {
     $http({
       method: 'POST',
@@ -93,13 +93,20 @@ $app.controller('UserController', ['$scope', '$routeParams', '$location', '$http
       } else if (data.success) {
         $location.path('/users');
       } else {
-        
+
       }
     }).error(function(data) {
-      
+
     });
   };
-    
+
+  $scope.deauthenticate = function() {
+    Auth.deauthenticate().then(function() {
+      console.log(Auth.authenticated);
+      $location.path('/login');
+    });
+  };
+
   if ($routeParams && (typeof $routeParams.assignmentId == "object")) {
     $scope.user = $routeParams.user;
   } else if ($routeParams && !isNaN($routeParams.userId)) {

@@ -7,14 +7,14 @@ $app.controller('LoginController', ['$scope', '$http', '$location', "$cookies", 
   };
   $scope.errorCode = null;
   $scope.errorMessage = null;
-  
+
   $scope.authenticated = null;
-  
+
   $scope.authenticate = function() {
     $scope.errorCode = null;
-    $scope.errorMessage = null;    
+    $scope.errorMessage = null;
     $scope.authenticated = null;
-  
+
     Auth.authenticate($scope.user).then(function (data) {
       console.log('then');
       if (data.authenticated) {
@@ -32,8 +32,6 @@ $app.controller('LoginController', ['$scope', '$http', '$location', "$cookies", 
           password: null
         };
         $scope.authenticated = null;
-
-
       }
     });
   };

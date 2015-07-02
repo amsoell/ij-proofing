@@ -1,5 +1,4 @@
 IJ Proofreading Assignment Tracker
-===========
+===
 
-ASP/SQL Server backend
-AngularJS front end
+AngularJS based project tracking system. Works with an SQL Server / ASP backend to handle authentication and task management.

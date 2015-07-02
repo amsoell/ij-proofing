@@ -1,3 +1,4 @@
+<nav ng-include="'views/nav.html'"></nav>
 <section>
   <form name="proofing_assignment" novalidate ng-submit="proofing_assignment.$valid && proofing_assignment.submit()">
     <label for="description">Description</label> {{assignment.description}}<br />
@@ -6,7 +7,7 @@
     <label for="time_to_complete">Time to complete</label> <input name="time_to_complete" id="time_to_complete" type="number" placeholder="Hours to complete" ng-model="assignment.time_to_complete" required />
       <div class="error" ng-show="proofing_assignment.time_to_complete.$dirty && proofing_assignment.time_to_complete.$invalid"><small class="error" ng-show="proofing_assignment.time_to_complete.$error.required">You must enter the time required to complete the assignment</small><small class="error" ng-show="proofing_assignment.time_to_complete.$error.number">Please enter a number.</small></div>
     <a class="button button-primary" ng-click="completeAssignment()" ng-disabled="proofing_assignment.$invalid">Save</a>
-    <a cancel-click class="button">Cancel</a>    
+    <a cancel-click class="button">Cancel</a>
   </form>
 </section>
 <debug>

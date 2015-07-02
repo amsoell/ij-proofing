@@ -1,0 +1,5 @@
+<ul ng-controller="UserController">
+  <li><a href="/#/assignments">Assignments</a></li>
+  <li ng-if="currentUser.administrator>0"><a href="/#/users" >Users</a></li>
+  <li><a ng-click="deauthenticate()">Logout</a></li>
+</ul>

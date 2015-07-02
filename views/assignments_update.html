@@ -1,3 +1,4 @@
+<nav ng-include="'views/nav.html'"></nav>
 <section>
   <form name="proofing_assignment" novalidate ng-submit="proofing_assignment.$valid && proofing_assignment.submit()">
     <label for="description">Description</label> <input name="description" id="description" type="text" ng-maxlength="100" placeholder="Short description of project" ng-model="assignment.description" required />
@@ -7,6 +8,6 @@
     <label for="expected_delivery">Requested return</label> <input name="requested_return" id="requested_return" type="text" ng-maxlength="250" placeholder="(e.g. ASAP, One week)" ng-model="assignment.requested_return" required />
       <div class="error" ng-show="proofing_assignment.requested_return.$dirty && proofing_assignment.requested_return.$invalid"><small class="error" ng-show="proofing_assignment.requested_return.$error.required">You must enter a requested return date</small><small class="error" ng-show="proofing_assignment.requested_return.$error.maxlength">Please limit your requested return date to 250 characters.</small></div>
     <a class="button button-primary" ng-click="updateAssignment()" ng-disabled="proofing_assignment.$invalid">Save</a>
-    <a cancel-click class="button">Cancel</a>    
+    <a cancel-click class="button">Cancel</a>
   </form>
 </section>

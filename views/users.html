@@ -1,11 +1,13 @@
+<nav ng-include="'views/nav.html'"></nav>
 <section id="users" ng-init="getUsers()">
-  <a href="#/users/create" class="button button-primary" ng-show="currentUser.administrator">New User</a><br />
+  <a href="#/users/create" class="button button-primary" ng-if="currentUser.administrator>0">New User</a><br />
   <br /><br />
 	<table class="table-border table-stripes">
 	  <thead>
 	    <tr>
 	      <th ng-click="predicate='username';reverse=!reverse" ng-class="{ sorted: predicate=='username', asc: !reverse, desc: reverse }">Username</th>
-	      <th ng-click="predicate='fullname';reverse=!reverse" ng-class="{ sorted: predicate=='fullname', asc: !reverse, desc: reverse }">Fullname</th>
+	      <th ng-click="predicate='lastname';reverse=!reverse" ng-class="{ sorted: predicate=='lastname', asc: !reverse, desc: reverse }">Last name</th>
+	      <th ng-click="predicate='firstname';reverse=!reverse" ng-class="{ sorted: predicate=='firstname', asc: !reverse, desc: reverse }">First name</th>
 	      <th ng-click="predicate='email';reverse=!reverse" ng-class="{ sorted: predicate=='email', asc: !reverse, desc: reverse }">Email</th>
 	      <th ng-show="currentUser.administrator">Details</th>
 	    </tr>
@@ -13,9 +15,10 @@
 	  <tbody>
 	    <tr ng-repeat="user in users | orderBy:predicate:reverse" ng-controller="UserController" ng-init="load($parent.user)">
 	      <td>{{user.username}}</td>
-        <td>{{user.fullname}}</td>
+        <td>{{user.lastname}}</td>
+        <td>{{user.firstname}}</td>
         <td>{{user.email}}</td>
-        <td ng-show="currentUser.administrator"><a ng-href="#/users/{{user.id}}/update">Update</a></td>
+        <td><a ng-href="#/users/{{user.id}}/update" ng-if="user.administrator<=currentUser.administrator">Update</a></td>
 	    </tr>
 	  </tbody>
 	</table>
