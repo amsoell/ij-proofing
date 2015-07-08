@@ -1,13 +1,15 @@
 <nav ng-include="'views/nav.html'"></nav>
 <section ng-cloak>
   <h3>{{assignment.description}}</h1>
-  Summary: {{assignment.summary}}<br />
-  Expected delivery: {{assignment.expected_delivery}}<br />
-  Requested return: {{assignment.requested_return}}<br />
-  Created: {{assignment.creation_date}}<br />
-  Created by: {{assignment.created_by.fullname}}<br />
-  <span ng-show="assignment.assigned_to">Assigned to: {{assignment.assigned_to.fullname}}</span><br />
-  <span ng-show="assignment.time_to_complete">Time to complete: {{assignment.time_to_complete}}</span><br />
+  <strong>Summary</strong>: {{assignment.summary}}<br />
+  <strong>Case</strong>: {{assignment.case_name}}<br />
+  <strong>Program</strong>: {{assignment.program_name}}<br />
+  <strong>Expected delivery</strong>: {{assignment.expected_delivery}}<br />
+  <strong>Requested return</strong>: {{assignment.requested_return}}<br />
+  <strong>Created</strong>: {{assignment.creation_date}}<br />
+  <strong>Created by</strong>: {{assignment.created_by.fullname}}<br />
+  <span ng-show="assignment.assigned_to"><strong>Assigned to</strong>: {{assignment.assigned_to.fullname}}</span><br />
+  <span ng-show="assignment.time_to_complete"><strong>Time to complete</strong>: {{assignment.time_to_complete}}</span><br />
   <span ng-show="!assignment.completion_date && assignment.assigned_to && (assignment.isMine || assignment.isClaimedByMe)">
     <a class="button button-mini button-primary" ng-href="#/assignments/{{assignment.id}}/complete">Mark completed</a>
     <a class="button button-mini" ng-click="unclaimAssignment()">Unclaim</a>

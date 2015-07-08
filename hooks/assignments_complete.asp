@@ -12,38 +12,99 @@
 
     '! Send notification
 
-    sqlx = "SELECT c.Email, t.Description, t.ExpectedDelivery, t.RequestedReturn, t.Summary, t.[Case], t.Program, a.FirstName + ' ' + a.LastName AS Fullname, t.TimeToComplete, a.Compensation, a.Address FROM [User] c " & _
+    sqlx = "SELECT c.Email, t.Description, t.ExpectedDelivery, t.RequestedReturn, t.Summary, t.[Case], t.Program, a.FirstName + ' ' + a.LastName AS Fullname, a.Email AS assigned_email, a.Phone AS assigned_phone, t.TimeToComplete, a.Compensation, a.Address as assigned_address, cs.CaseNum as case_num, pg.ProgramNum as program_num FROM [User] c " & _
            "INNER JOIN Task t on t.CreatedBy=c.id " & _
+           "INNER JOIN [Case] cs ON t.[Case]=cs.CaseNum " & _
+           "INNER JOIN [Program] pg ON t.[Program]=pg.ProgramNum " & _
            "INNER JOIN [User] a ON t.AssignedTo=a.id " & _
            "WHERE t.id=" & request("id")
     Set rs = objConn.execute(sqlx)
 
     if not rs.eof then
-      '! - To the creator...
-      body = "Your assignment has been completed by <strong>" & rs("Fullname") & "</strong><br /><br />" & _
-             "Assignment: " & rs("Description") & "<br />" & _
-             "Available for Proofing Date: " & rs("ExpectedDelivery") & "<br />" & vbcrlf & _
-             "Due Date: " & rs("RequestedReturn") & "<br />" & vbcrlf & _
-             "Summary: " & rs("Summary")
+      assigned_address  = rs("assigned_address")
+      email             = rs("Email")
+      fullname          = rs("fullname")
+      description       = rs("description")
+      expected_delivery = rs("ExpectedDelivery")
+      requested_return  = rs("RequestedReturn")
+      summary           = rs("summary")
+      case_num          = rs("case_num")
+      program_num       = rs("program_num")
+      time_to_complete  = rs("TimeToComplete")
+      compensation      = rs("Compensation")
+      assigned_email    = rs("assigned_email")
+      assigned_phone    = rs("assigned_phone")
 
-      dispatchNotification rs("Email"), "Proofing Assignment Completed: " & rs("Description"), body
+      '! - To the creator...
+      ' Template
+      '  To: Requester; Proofing Admins
+      '  From: IJ Proofing Assignment System
+      '  Reply to: Requester; Proofing Admins
+      '  Subject: Proofing Assignment Completed[assignment description]
+      '  Body:
+      '
+      '         [First Name of Requester],
+      '
+      '         Your assignment has been completed by [proofer first name, proofer last name].
+      '
+      '         Assignment: [Assignment Description]
+      '         Available for Proofing Date: [Delivery Date]
+      '         Due Date: [Due Date]
+      '         Summary: [Assignment Summary]
+      '         --------------------------------------------------------------------------------------
+
+      body = "Your assignment has been completed by <strong>" & fullname & "</strong><br /><br />" & _
+             "<strong>Assignment</strong>: " & description & "<br />" & _
+             "<strong>Available for Proofing Date</strong>: " & expected_delivery & "<br />" & vbcrlf & _
+             "<strong>Due Date</strong>: " & requested_return & "<br />" & vbcrlf & _
+             "<strong>Summary</strong>: " & summary
+
+      ' One to the creator...
+      dispatchNotification email, "Proofing Assignment Completed: " & description, body, null, null
+      ' ...and one to the admins
+      dispatchNotification "proofingadmins@ij.org", "Proofing Assignment Completed: " & description, body, null, null
 
       '! - ...and to accounting
-      body = "Please pay <strong>" & rs("Fullname") & "</strong> for completing the following proofing assignment:<br /><br />" & vbcrlf & vbcrlf & _
-             "Invoice Number: " & request("id") & "<br />" & vbcrlf &  _
-             "Case Code & Program: " & rs("Case") & "-" & rs("Program") & "<br />" & vbcrlf & _
-             "Hours: " & rs("TimeToComplete") & "<br />" & vbcrlf & _
-             "Rate: " & rs("Compensation") & "<br />" & vbcrlf
-      if IsNumeric(rs("TimeToComplete")) and IsNumeric(rs("Compensation")) then
-        invoiceTotal = rs("TimeToComplete") * rs("Compensation")
-        body = body & "Total: " & invoiceTotal & "<br />" & vbcrlf
+      ' Template
+      '  To: Accounting
+      '  From: IJ Proofing Assignment System
+      '  Reply to: Requester; Proofing Admins
+      '  Subject: Proofing Assignment Invoice #[assignment record ID] for [assignment description]
+      '  Body:
+      '
+      '         Please pay [proofer first name, proofer last name] for completing the following proofing assignment:
+      '
+      '         Invoice Number: [assignment record ID]
+      '         Assignment: [Assignment Description]
+      '         Case Code & Program: [Case/ Program]
+      '         Hours:[Assignment Hours]
+      '         Rate:[User Rate]
+      '         Total: $[UserRate multiplied by Hours]
+      '
+      '         Please mail check to:
+      '         [Mailing Address]
+      '         [Email Address]
+      '         [Telephone]
+      '
+      '         --------------------------------------------------------------------------------------
+      body = "Please pay <strong>" & fullname & "</strong> for completing the following proofing assignment:<br /><br />" & vbcrlf & vbcrlf & _
+             "<strong>Invoice Number</strong>: " & request("id") & "<br />" & vbcrlf &  _
+             "<strong>Assignment</strong>: " & decription & "<br />" & vbcrlf & _
+             "<strong>Case Code & Program</strong>: " & case_num & " / " & program_num & "<br />" & vbcrlf & _
+             "<strong>Hours</strong>: " & time_to_complete & "<br />" & vbcrlf & _
+             "<strong>Rate</strong>: " & compensation & "<br />" & vbcrlf
+      if IsNumeric(time_to_complete) and IsNumeric(compensation) then
+        invoiceTotal = time_to_complete * compensation
+        body = body & "<strong>Total</strong>: " & invoiceTotal & "<br />" & vbcrlf
       end if
 
       body = body & vbcrlf & "<br />" & _
              "Please mail check to: <br />" & vbcrlf & _
-             rs("Address")
+             assigned_address & "<br />" & vbcrlf & _
+             assigned_email & "<br />" & vbcrlf & _
+             assigned_phone & "<br />"
 
-      dispatchNotification "amsoell@ij.org", "Proofing Assignment Invoice #" & request("id") & " for " & rs("Description"), body
+      dispatchNotification "amsoell@ij.org", "Proofing Assignment Invoice #" & request("id") & " for " & rs("Description"), body, null, null
   end if
 
 

@@ -15,12 +15,12 @@
     if not rs.eof then
 
       body = "Your assignment has been deleted<br /><br />" & _
-             "Assignment: " & rs("Description") & "<br />" & _
-             "Available for Proofing Date: " & rs("ExpectedDelivery") & "<br />" & vbcrlf & _
-             "Due Date: " & rs("RequestedReturn") & "<br />" & vbcrlf & _
-             "Summary: " & rs("Summary")
+             "<strong>Assignment</strong>: " & rs("Description") & "<br />" & _
+             "<strong>Available for Proofing Date</strong>: " & rs("ExpectedDelivery") & "<br />" & vbcrlf & _
+             "<strong>Due Date</strong>: " & rs("RequestedReturn") & "<br />" & vbcrlf & _
+             "<strong>Summary</strong>: " & rs("Summary")
 
-      dispatchNotification rs("Email"), "Proofing Assignment Deleted: " & rs("Description"), body
+      dispatchNotification rs("Email"), "Proofing Assignment Deleted: " & rs("Description"), body, null, null
     end if
 
     '! Delete notification

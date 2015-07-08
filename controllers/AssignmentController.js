@@ -3,6 +3,25 @@
 $app.controller('AssignmentController', ['$scope', '$routeParams', '$location', '$http', 'AuthenticationService', function($scope, $routeParams, $location, $http, Auth, transformRequestAsFormPost) {
   $scope.user = Auth.getUser();
 
+  // Get cases
+  $http.get('/hooks/cases.asp').success(function(data) {
+    if (data.authenticated===false) {
+      $location.path('/login');
+    } else if (data.success) {
+      $scope.cases = data.cases;
+    }
+  });
+
+  // Get programs
+  $http.get('/hooks/programs.asp').success(function(data) {
+    if (data.authenticated===false) {
+      $location.path('/login');
+    } else if (data.success) {
+      $scope.programs = data.programs;
+    }
+  });
+
+
   $scope.load = function($o) {
     if (($o !== null) && (typeof $o === 'object')) {
       // Assignment passed in directly
