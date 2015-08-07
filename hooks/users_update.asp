@@ -1,7 +1,7 @@
 <!--#include file="authcheck.asp" -->
 <!--#include virtual="/lib/sha256.asp" -->
 <%
-  Set objConn = Application("objConnection")
+  Set objConn = Application("objConnection_Proofing")
 
   if len(request("username"))>0 then
     sqlx = "SELECT Username FROM [User] WHERE Username='" & request("username") & "' AND id<>" & request("id")

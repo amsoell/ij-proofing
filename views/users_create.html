@@ -15,7 +15,7 @@
       <div class="error" ng-show="proofing_user.address.$dirty && proofing_user.address.$invalid"><small class="error" ng-show="proofing_user.address.$error.required">You must enter mailing address</small></div>
     <label for="phone">Telephone</label> <input name="phone" id="phone" type="text" ng-maxlength="20" placeholder="555-867-5309" ng-model="user.phone" required />
       <div class="error" ng-show="proofing_user.phone.$dirty && proofing_user.phone.$invalid"><small class="error" ng-show="proofing_user.phone.$error.required">You must enter a phone number</small><small class="error" ng-show="proofing_user.phone.$error.maxlength">Please limit your phone number to 20 characters.</small></div>
-    <label for="password">Password</label> <input name="password" id="password" type="password" ng-maxlength="36" ng-minlength="6" placeholder="Leave blank to keep unchanged" ng-model="user.password" autocomplete="off" />
+    <label for="password">Password</label> <input name="password" id="password" type="password" ng-maxlength="36" ng-minlength="6" placeholder="*****" ng-model="user.password" autocomplete="off" />
       <div class="error" ng-show="proofing_user.password.$dirty && proofing_user.password.$invalid"><small class="error" ng-show="proofing_user.password.$error.required">You must enter a password</small><small class="error" ng-show="proofing_user.password.$error.maxlength">Please limit your password to 36 characters</small><small class="error" ng-show="proofing_user.password.$error.minlength">Your password must be at least 6 characters</small></div>
     <span ng-if="currentUser.administrator>=2">
       <label for="administrator">Account type</label> <select name="administrator" id="administrator" ng-model="user.administrator">

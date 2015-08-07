@@ -1,17 +1,14 @@
 <!--#include file="authcheck.asp" -->
 <%
-  Set objConn = Application("objConnection")
-  
+  Set objConn = Application("objConnection_Proofing")
+
   if Session("isAdministrator") then
-    sqlx = "DELETE FROM [Task] WHERE CreatedBy=" & request("id")
-    objConn.execute(sqlx)
-    
     sqlx = "UPDATE [Task] SET AssignedTo=NULL, AssignmentDate=NULL WHERE AssignedTo=" & request("id")
     objConn.execute(sqlx)
-    
+
     sqlx = "DELETE TOP (1) FROM [User] WHERE id=" & request("id")
-  
-    Set rs = objConn.execute(sqlx)  
+
+    Set rs = objConn.execute(sqlx)
 %>
 { "success": true }
 <% else %>

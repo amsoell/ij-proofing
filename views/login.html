@@ -9,6 +9,9 @@
 	        <label for="password">Password</label> <input name="password" id="password" type="password" ng-model="user.password"  autocomplete="off" />
 	        <button class="button button-mini button-primary" ng-click="authenticate()">Login</button>
         </fieldset>
+        <aside>
+          If you need login assistance with this site please contact <a href="mailto:support@ij.org">support@ij.org</a>
+        </aside>
         <aside class="error" ng-show="errorCode">
           Error: {{errorCode}}: {{errorMessage}}
         </aside>

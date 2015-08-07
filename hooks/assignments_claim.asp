@@ -1,22 +1,21 @@
 <!--#include file="authcheck.asp" -->
 <!--#include virtual="/lib/notifications.asp" -->
 <%
-  Set objConn = Application("objConnection")
+  Set dbProofing = Application("objConnection_Proofing")
 
   sqlx = "UPDATE Task SET "
   sqlx = sqlx & "AssignedTo=" & replace(Session("id"), "'", "''") & ", "
   sqlx = sqlx & "AssignmentDate=CURRENT_TIMESTAMP, "
-  sqlx = sqlx & "CreationDate=CreationDate WHERE id=" & request("id") & " AND AssignedTo IS NULL AND CreatedBy<>" & Session("id")
+  sqlx = sqlx & "CreationDate=CreationDate WHERE id=" & request("id") & " AND AssignedTo IS NULL"
 
-  objConn.execute(sqlx)
+  dbProofing.execute(sqlx)
 
   '! Send notification
 
-  sqlx = "SELECT c.Email, t.Description, t.ExpectedDelivery, t.RequestedReturn, t.Summary, a.Firstname + ' ' + a.Lastname AS Fullname, c.Firstname AS created_by_firstname, c.Email as created_by_email FROM [User] c " & _
-         "INNER JOIN Task t on t.CreatedBy=c.id " & _
+  sqlx = "SELECT t.CreatedByEmail AS created_by_email, t.Description, t.ExpectedDelivery, t.RequestedReturn, t.Summary, a.Firstname + ' ' + a.Lastname AS Fullname, t.CreatedByName AS created_by_firstname FROM Task t " & _
          "INNER JOIN [User] a ON t.AssignedTo=a.id " & _
          "WHERE t.id=" & request("id")
-  Set rs = objConn.execute(sqlx)
+  Set rs = dbProofing.execute(sqlx)
 
   if not rs.eof then
     created_by_firstname    = rs("created_by_firstname")

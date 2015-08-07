@@ -91,5 +91,5 @@ var $app = angular.module('proofing',[
 });
 
 $app.run(function($rootScope) {
-  $rootScope.debugMode = true;
+  $rootScope.debugMode = false;
 });

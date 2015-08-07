@@ -1,6 +1,5 @@
 <nav ng-include="'views/nav.html'"></nav>
 <section id="assignments" ng-init="getAssignments()">
-  <a href="#/assignments/create" class="button button-primary" ng-if="user.administrator>0">New Assignment</a><br />
   <label for="assignmentFilter">Show:</label> <select name="assignmentFilter" id="assignmentFilter" ng-model="assignmentFilter">
     <option value="">&mdash;ALL&mdash;</option>
     <option value="Available">Available</option>
@@ -30,6 +29,7 @@
         <td>{{assignment.status}}</td>
         <td><a ng-href="#/assignments/{{assignment.id}}">Details</a></td>
 	    </tr>
+	    <tr ng-hide="assignments.length>0" class="ng-cloak"><td colspan="7" class="subtleNotice">No assignments to show</td></tr>
 	  </tbody>
 	</table>
 </section>

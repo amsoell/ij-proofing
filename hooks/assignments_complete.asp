@@ -1,24 +1,21 @@
 <!--#include file="authcheck.asp" -->
 <!--#include virtual="/lib/notifications.asp" -->
 <%
-  Set objConn = Application("objConnection")
+  Set dbProofing = Application("objConnection_Proofing")
 
   if IsNumeric(request("time_to_complete")) then
     sqlx = "UPDATE Task SET "
     sqlx = sqlx & "TimeToComplete=" & request("time_to_complete") & ", "
     sqlx = sqlx & "CompletionDate=CURRENT_TIMESTAMP, "
-    sqlx = sqlx & "CreationDate=CreationDate WHERE id=" & request("id") & " AND AssignedTo IS NOT NULL AND (CreatedBy=" & Session("id") & " OR AssignedTo=" & Session("id") & ")"
-    objConn.execute(sqlx)
+    sqlx = sqlx & "CreationDate=CreationDate WHERE id=" & request("id") & " AND AssignedTo IS NOT NULL AND AssignedTo=" & Session("id")
+    dbProofing.execute(sqlx)
 
     '! Send notification
 
-    sqlx = "SELECT c.Email, t.Description, t.ExpectedDelivery, t.RequestedReturn, t.Summary, t.[Case], t.Program, a.FirstName + ' ' + a.LastName AS Fullname, a.Email AS assigned_email, a.Phone AS assigned_phone, t.TimeToComplete, a.Compensation, a.Address as assigned_address, cs.CaseNum as case_num, pg.ProgramNum as program_num FROM [User] c " & _
-           "INNER JOIN Task t on t.CreatedBy=c.id " & _
-           "INNER JOIN [Case] cs ON t.[Case]=cs.CaseNum " & _
-           "INNER JOIN [Program] pg ON t.[Program]=pg.ProgramNum " & _
+    sqlx = "SELECT t.CreatedByEmail AS Email, t.Description, t.ExpectedDelivery, t.RequestedReturn, t.Summary, t.[Case] AS case_num, t.Program AS program_num, a.FirstName + ' ' + a.LastName AS Fullname, a.Email AS assigned_email, a.Phone AS assigned_phone, t.TimeToComplete, a.Compensation, a.Address as assigned_address FROM Task t " & _
            "INNER JOIN [User] a ON t.AssignedTo=a.id " & _
            "WHERE t.id=" & request("id")
-    Set rs = objConn.execute(sqlx)
+    Set rs = dbProofing.execute(sqlx)
 
     if not rs.eof then
       assigned_address  = rs("assigned_address")
@@ -89,13 +86,13 @@
       '         --------------------------------------------------------------------------------------
       body = "Please pay <strong>" & fullname & "</strong> for completing the following proofing assignment:<br /><br />" & vbcrlf & vbcrlf & _
              "<strong>Invoice Number</strong>: " & request("id") & "<br />" & vbcrlf &  _
-             "<strong>Assignment</strong>: " & decription & "<br />" & vbcrlf & _
+             "<strong>Assignment</strong>: " & description & "<br />" & vbcrlf & _
              "<strong>Case Code & Program</strong>: " & case_num & " / " & program_num & "<br />" & vbcrlf & _
              "<strong>Hours</strong>: " & time_to_complete & "<br />" & vbcrlf & _
              "<strong>Rate</strong>: " & compensation & "<br />" & vbcrlf
       if IsNumeric(time_to_complete) and IsNumeric(compensation) then
         invoiceTotal = time_to_complete * compensation
-        body = body & "<strong>Total</strong>: " & invoiceTotal & "<br />" & vbcrlf
+        body = body & "<strong>Total</strong>: " & FormatCurrency(invoiceTotal) & "<br />" & vbcrlf
       end if
 
       body = body & vbcrlf & "<br />" & _
@@ -104,7 +101,7 @@
              assigned_email & "<br />" & vbcrlf & _
              assigned_phone & "<br />"
 
-      dispatchNotification "amsoell@ij.org", "Proofing Assignment Invoice #" & request("id") & " for " & rs("Description"), body, null, null
+      dispatchNotification "accounting@ij.org", "Proofing Assignment Invoice #" & request("id") & " for " & rs("Description"), body, null, null
   end if
 
 

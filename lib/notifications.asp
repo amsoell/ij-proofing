@@ -1,7 +1,7 @@
 <%
 
 function dispatchNotification(mail_to, mail_subject, mail_body, mail_from, mail_replyto)
-  debugMode = true
+  debugMode = false
 
   if IsNull(mail_from) then
     send_from = "IJ Proofing Assignment System <proofingadmins@ij.org>"

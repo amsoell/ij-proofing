@@ -1,7 +1,7 @@
 <!--#include virtual="/hooks/authcheck.asp" -->
 <!--#include virtual="/lib/json.asp" -->
 <%
-  Set objConn = Application("objConnection")
+  Set objConn = Application("objConnection_Proofing")
 
   if request("id")>0 then
     sqlx = "SELECT u.id, u.username, u.firstname + ' ' + u.lastname AS fullname, u.firstname, u.lastname, u.compensation, u.email, u.address, u.phone, ISNULL(Administrator, 0) AS administrator FROM [User] u WHERE u.id=" & request("id")

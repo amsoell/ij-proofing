@@ -1,6 +1,6 @@
 <!--#include virtual="/lib/sha256.asp"-->
 <%
-  Set objConn = Application("objConnection")
+  Set dbProofing = Application("objConnection_Proofing")
 
   if len(Session("isAuthenticated"))<=0 then
     if len(request("username"))>0 and len(request("password"))>0 then
@@ -12,7 +12,7 @@
 
     sqlx = "SELECT TOP (1) id, Email, Username, Firstname+' '+Lastname AS Fullname, Firstname, Lastname, Administrator FROM [User] WHERE Username='" & replace(username, "'", "''") & "' AND Password='" & sha256(password) & "'"
 
-    Set rs = objConn.execute(sqlx)
+    Set rs = dbProofing.execute(sqlx)
 
     if rs.eof then
 %>

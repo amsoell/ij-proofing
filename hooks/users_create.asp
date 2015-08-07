@@ -2,7 +2,7 @@
 <!--#include virtual="/lib/sha256.asp" -->
 <!--#include virtual="/lib/json.asp" -->
 <%
-  Set objConn = Application("objConnection")
+  Set objConn = Application("objConnection_Proofing")
 
 
   if Session("AdminLevel")>0 then
@@ -69,4 +69,3 @@
 <%else %>
 { "success": false, "reason": "You are not an authorized administrator" }
 <%end if %>
-
